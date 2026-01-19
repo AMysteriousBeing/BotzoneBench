@@ -1,0 +1,1 @@
+[null, {"promotion": "*", "source": "b2", "target": "b4"}, {"promotion": "*", "source": "g8", "target": "f6"}, {"promotion": "*", "source": "g1", "target": "f3"}, {"promotion": "*", "source": "a7", "target": "a5"}, {"promotion": "*", "source": "f3", "target": "e5"}, {"err": "INVALIDMOVE", "winner": 1}]

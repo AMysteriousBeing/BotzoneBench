@@ -1,0 +1,4 @@
+{
+    "llm_name": "qwen3:4b-15360",
+    "api_access": "local_vllm"
+}
