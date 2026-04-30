@@ -1,6 +1,6 @@
 # BotzoneBench: Anchored LLM Evaluation with Skill-Calibrated Game AI
 
-BotzoneBench is a scalable evaluation framework for large language models (LLMs) based on anchored, skill-calibrated game AIs. It replaces traditional LLM-vs-LLM tournaments with a fixed hierarchy of non-LLM game bots, enabling linear-time evaluation, absolute performance ratings, and interpretable analysis of strategic decision-making.
+BotzoneBench is built on top of Botzone-ALE, and it is a scalable evaluation framework for large language models (LLMs) based on anchored, skill-calibrated game AIs. It replaces traditional LLM-vs-LLM tournaments with a fixed hierarchy of non-LLM game bots, enabling linear-time evaluation, absolute performance ratings, and interpretable analysis of strategic decision-making.
 
 ## 🌟 Key Features
 * **Anchored Evaluation:** Assess LLMs against fixed skill-level AI bots instead of volatile model pools
