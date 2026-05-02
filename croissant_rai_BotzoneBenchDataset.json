@@ -1,0 +1,1055 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "arrayShape": "cr:arrayShape",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "containedIn": "cr:containedIn",
+    "cr": "http://mlcommons.org/croissant/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataBiases": "cr:dataBiases",
+    "dataCollection": "cr:dataCollection",
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileProperty": "cr:fileProperty",
+    "fileObject": "cr:fileObject",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isArray": "cr:isArray",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "personalSensitiveInformation": "cr:personalSensitiveInformation",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "prov": "http://www.w3.org/ns/prov#"
+  },
+  "@type": "sc:Dataset",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "repo",
+      "name": "repo",
+      "description": "The Hugging Face git repository.",
+      "contentUrl": "https://huggingface.co/datasets/AMysteriousBeing/BotzoneBenchDataset/tree/refs%2Fconvert%2Fparquet",
+      "encodingFormat": "git+https",
+      "sha256": "https://github.com/mlcommons/croissant/issues/80"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-game_single",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "game_single/*/*.parquet"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-game_tournament",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "game_tournament/*/*.parquet"
+    },
+    {
+      "@type": "cr:FileSet",
+      "@id": "parquet-files-for-config-llm_tournament",
+      "containedIn": {
+        "@id": "repo"
+      },
+      "encodingFormat": "application/x-parquet",
+      "includes": "llm_tournament/*/*.parquet"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "game_single_splits/split_name"
+      },
+      "@id": "game_single_splits",
+      "name": "game_single_splits",
+      "description": "Splits for the game_single config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "game_single_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "game_single_splits/split_name": "train"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "game_single",
+      "description": "AMysteriousBeing/BotzoneBenchDataset - 'game_single' subset\n\nAdditional information:\n- 1 skipped column: payload",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "game_single/(?:partial-)?(train)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "game_single_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/dataset_kind",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "dataset_kind"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/match_key",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "match_key"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/game",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "game"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/level",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "level"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/llm_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "llm_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/round",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "round"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/event_index",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "event_index"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/actor_seat",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "actor_seat"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/event_type",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "event_type"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/log_path",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "log_path"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/mode",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "mode"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/source_root",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "source_root"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/game_starter",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "game_starter"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_single/is_rematch",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_single"
+            },
+            "extract": {
+              "column": "is_rematch"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "game_tournament_splits/split_name"
+      },
+      "@id": "game_tournament_splits",
+      "name": "game_tournament_splits",
+      "description": "Splits for the game_tournament config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "game_tournament_splits/split_name": "train"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "game_tournament",
+      "description": "AMysteriousBeing/BotzoneBenchDataset - 'game_tournament' subset\n\nAdditional information:\n- 3 skipped columns: level, llm_name, payload",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "game_tournament/(?:partial-)?(train)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "game_tournament_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/dataset_kind",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "dataset_kind"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/match_key",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "match_key"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/game",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "game"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/round",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "round"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/event_index",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "event_index"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/actor_seat",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "actor_seat"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/event_type",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "event_type"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/log_path",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "log_path"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/mode",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "mode"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/source_root",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "source_root"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/llm1_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "llm1_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/llm2_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "llm2_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "game_tournament/is_rematch",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-game_tournament"
+            },
+            "extract": {
+              "column": "is_rematch"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "dataType": "cr:Split",
+      "key": {
+        "@id": "llm_tournament_splits/split_name"
+      },
+      "@id": "llm_tournament_splits",
+      "name": "llm_tournament_splits",
+      "description": "Splits for the llm_tournament config.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament_splits/split_name",
+          "dataType": "sc:Text"
+        }
+      ],
+      "data": [
+        {
+          "llm_tournament_splits/split_name": "train"
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "llm_tournament",
+      "description": "AMysteriousBeing/BotzoneBenchDataset - 'llm_tournament' subset\n\nAdditional information:\n- 1 skipped column: level",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/split",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "fileProperty": "fullpath"
+            },
+            "transform": {
+              "regex": "llm_tournament/(?:partial-)?(train)/.+parquet$"
+            }
+          },
+          "references": {
+            "field": {
+              "@id": "llm_tournament_splits/split_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/dataset_kind",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "dataset_kind"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/mode",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "mode"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/source_root",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "source_root"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/match_key",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "match_key"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/game",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "game"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/llm_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "llm_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/opponent_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "opponent_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/round",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "round"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/seat",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "seat"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/decision_index",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "decision_index"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/timestamp",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "timestamp"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/system_prompt",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "system_prompt"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/user_prompt",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "user_prompt"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/reasoning",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "reasoning"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/output",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "output"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/response",
+          "subField": [
+            {
+              "@type": "cr:Field",
+              "@id": "llm_tournament/response/x",
+              "dataType": "cr:Int64",
+              "source": {
+                "fileSet": {
+                  "@id": "parquet-files-for-config-llm_tournament"
+                },
+                "extract": {
+                  "column": "response"
+                },
+                "transform": {
+                  "jsonPath": "x"
+                }
+              }
+            },
+            {
+              "@type": "cr:Field",
+              "@id": "llm_tournament/response/y",
+              "dataType": "cr:Int64",
+              "source": {
+                "fileSet": {
+                  "@id": "parquet-files-for-config-llm_tournament"
+                },
+                "extract": {
+                  "column": "response"
+                },
+                "transform": {
+                  "jsonPath": "y"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/raw_debug",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "raw_debug"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/raw_response",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "raw_response"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/log_path",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "log_path"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/game_log_path",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "game_log_path"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/game_log_stem",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "game_log_stem"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/is_rematch",
+          "dataType": "sc:Boolean",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "is_rematch"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/game_event_index",
+          "dataType": "cr:Int64",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "game_event_index"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/game_event_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "game_event_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/llm1_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "llm1_name"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "llm_tournament/llm2_name",
+          "dataType": "sc:Text",
+          "source": {
+            "fileSet": {
+              "@id": "parquet-files-for-config-llm_tournament"
+            },
+            "extract": {
+              "column": "llm2_name"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "conformsTo": "http://mlcommons.org/croissant/1.1",
+  "name": "BotzoneBenchDataset",
+  "description": "\n\t\n\t\t\n\t\tDataset Card for BotzoneBenchDataset\n\t\n\n\n\t\n\t\t\n\t\tDataset Description\n\t\n\n\n\t\n\t\t\n\t\tDataset Summary\n\t\n\nBotzoneBenchDataset is a structured JSONL version of the raw evaluation logs released with BotzoneBench, an anchored evaluation framework for large language models in multi-game decision-making settings.\nThis dataset separates two complementary views of the same benchmark:\n\nllm_single and llm_tournament: turn-level LLM interaction records containing prompts, optional reasoning traces… See the full description on the dataset page: https://huggingface.co/datasets/AMysteriousBeing/BotzoneBenchDataset.",
+  "alternateName": [
+    "AMysteriousBeing/BotzoneBenchDataset",
+    "BotzoneBenchDataset"
+  ],
+  "creator": {
+    "@type": "Person",
+    "name": "Someone",
+    "url": "https://huggingface.co/AMysteriousBeing"
+  },
+  "keywords": [
+    "multilingual",
+    "English",
+    "Chinese",
+    "cc-by-4.0",
+    "100K<n<1M",
+    "🇺🇸 Region: US"
+  ],
+  "license": "https://choosealicense.com/licenses/cc-by-4.0/",
+  "url": "https://huggingface.co/datasets/AMysteriousBeing/BotzoneBenchDataset",
+  "rai:dataLimitations": "Known limitations include:\n- Not every record contains an explicit reasoning trace; `reasoning` may be empty or `null`.\n- Some multi-player logs contain passive records such as `PASS`, which are useful for replay but may not correspond to a distinct game action by the target model.\n- `game_event_id` is best-effort and intentionally left empty when alignment would be unreliable.\n- Schema details vary across games because action spaces differ substantially.\n- The dataset contains model-generated text that may be incorrect, hallucinated, strategically weak, or internally inconsistent.\n\nUsers should validate subset-specific assumptions before training models that rely on uniform field semantics across all games.",
+  "rai:dataBiases": "Several biases should be considered:\n- Game selection bias: the benchmark covers a specific set of board and card games rather than the full range of real-world decision tasks.\n- Prompt design bias: prompts are generated by the benchmark framework and may privilege some styles of explanation or action formatting.\n- Model coverage bias: the released logs reflect a finite set of LLMs, baselines, and levels used during collection.\n- Language bias: most prompts are in English, with only limited Chinese coverage.\n- Logging bias: some games expose richer intermediate state than others, which can affect apparent reasoning quality.",
+  "rai:personalSensitiveInformation": "No personal or sensitive information.",
+  "rai:dataUseCases": "This dataset is intended to represent LLM strategic decision-making in structured game environments. It captures the relationship between game state, prompt, optional reasoning trace, and final executed action. It is therefore suitable for use cases such as action prediction, reasoning-to-action consistency analysis, match replay, trajectory analysis, and cross-game evaluation of model behavior.\n\nThese use cases are supported by the dataset construction: records are derived from raw benchmark logs, normalized into JSONL, and linked across interaction-level and environment-level views through stable identifiers such as match_key and, when available, game_event_id. However, the dataset has not been validated as a measure of general intelligence, human reasoning, or decision quality in real-world domains such as healthcare, law, finance, or education. Use outside controlled game-strategy research is therefore out of scope unless separately validated.",
+  "rai:dataSocialImpact": "A positive use of this dataset is to support more transparent and rigorous evaluation of LLM behavior in sequential decision-making settings. By preserving both reasoning traces and environment actions, it can help researchers study consistency, interpretability, and failure modes in model-based game play.\n\nPotential risks include overgeneralizing benchmark performance to real-world reasoning, training models to imitate strategic explanation style without improving robustness, and using the data to optimize adversarial or manipulative behavior in competitive settings. The dataset also reflects a limited set of games, prompts, and model conditions, so conclusions may not generalize broadly. The dataset does not contain personal data, which reduces privacy risk, but it is not access-restricted, so responsible use depends on clear documentation and careful downstream evaluation.",
+  "rai:hasSyntheticData": false,
+  "prov:wasDerivedFrom": [
+    {
+      "@id": "https://github.com/AMysteriousBeing/BotzoneBench",
+      "prov:label": "BotzoneBench",
+      "sc:license": "CC-BY-4.0"
+    }
+  ],
+  "prov:wasGeneratedBy": [
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q4929239"
+      },
+      "prov:label": "Data Collection",
+      "sc:description": "The game interaction logs were generated by prompting several large language models (LLMs) to play multiple games. We used them to produce step-by-step reasoning and move decisions under a standardized system prompt. A total of 6,443 games were simulated, with the model parameters set to default. All API calls were made via the requests Python package, and the full text responses were collected as raw logs. Initial data are saved as .log files."
+    },
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q5227332"
+      },
+      "prov:label": "Data Preprocessing",
+      "sc:description": "The raw API responses, which included debug information, timestamps, and unstructured text, were transformed into the final structured JSONL dataset through a custom Python preprocessing pipeline. The steps include: (1) parsing each raw log entry to extract the system prompt, user prompt, and the model-generated text; (2) filtering out failed API calls, incomplete responses, or entries that did not contain valid move outputs; (3) structuring the extracted fields into consistent JSON objects with keys 'system_prompt', 'user_prompt', and 'output', matching the exact format of the dataset. No additional text cleaning or normalization beyond the original model output was applied."
+    },
+    {
+      "@type": "prov:Activity",
+      "prov:type": {
+        "@id": "https://www.wikidata.org/wiki/Q109719325"
+      },
+      "prov:label": "Annotation",
+      "sc:description": "This dataset does not contain any human annotation. All game moves and analyses are generated automatically by the LLM. Win/loss outcomes, where applicable, are derived directly from the rules of Reversi implemented in the simulation environment, without manual labeling."
+    }
+  ]
+}
