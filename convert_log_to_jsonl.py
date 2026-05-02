@@ -1,3 +1,12 @@
+"""
+修复版的 convert_logs_to_jsonl.py
+
+主要修复：
+1. is_active_llm_record() 现在严格过滤 system_prompt 为 'NA' 或空值的记录
+2. build_llm_records() 只保留 is_active_llm_record() 返回 True 的记录
+3. 只有有效的 LLM 决策记录才会被写入 jsonl
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -38,6 +47,9 @@ KNOWN_TOURNAMENT_LLM_NAMES = {
     "KimiK2",
 }
 
+# 最短有效 system_prompt 长度（根据实际数据，约50字符是最短的"真实"system_prompt）
+MIN_VALID_SYSTEM_PROMPT_LEN = 50
+
 
 @dataclass
 class ParsedLogRecord:
@@ -50,13 +62,18 @@ class ParsedLogRecord:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Convert Botzone benchmark logs into JSONL datasets."
+        description="Convert Botzone benchmark logs into JSONL datasets (filtered)."
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
         help="Directory for generated JSONL files.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Only count records without writing files.",
     )
     return parser.parse_args()
 
@@ -401,13 +418,45 @@ def build_game_index(
 
 
 def is_active_llm_record(record: ParsedLogRecord) -> bool:
+    """
+    判断 LLM 记录是否是有效的决策记录。
+
+    有效记录必须有有效的游戏上下文（system_prompt 或 user_prompt）。
+
+    判断标准（与 count_game_states.py 一致）：
+    1. 有有效的 system_prompt（非空、非 'NA'、长度 >= 50）
+    2. 或者有有效的 user_prompt（长度 >= 50）
+    3. response 不是 PASSIVE_RESPONSES 中的值（但 PASS 本身是有效的游戏动作）
+
+    注意：不再仅凭 active response 就判定为有效。
+    一个有效的游戏决策状态必须有游戏上下文信息。
+    """
     debug_fields = normalize_debug_fields(record.debug_value)
     response = record.response_value
-    if debug_fields.get("system_prompt") or debug_fields.get("user_prompt"):
-        return True
-    if isinstance(response, str) and response.strip() in PASSIVE_RESPONSES:
-        return False
-    return response is not None
+
+    # 检查 system_prompt 是否有效
+    system_prompt = debug_fields.get("system_prompt")
+    if system_prompt:
+        # 排除 'NA' 和太短的（无效的）
+        if (
+            isinstance(system_prompt, str)
+            and system_prompt != "NA"
+            and len(system_prompt) >= MIN_VALID_SYSTEM_PROMPT_LEN
+        ):
+            return True
+
+    # 检查 user_prompt 是否有效
+    user_prompt = debug_fields.get("user_prompt")
+    if user_prompt:
+        if (
+            isinstance(user_prompt, str)
+            and len(user_prompt) >= MIN_VALID_SYSTEM_PROMPT_LEN
+        ):
+            return True
+
+    # 如果既没有有效的 system_prompt 也没有有效的 user_prompt，则不算有效记录
+    # 注意：不再仅凭 active response 就判定为有效
+    return False
 
 
 def llm_record_id(match_key: str, seat: int, decision_index: int) -> str:
@@ -418,8 +467,12 @@ def build_llm_records(
     root: Path,
     game_index: dict[str, dict[str, Any]],
     dataset_kind: str,
+    dry_run: bool = False,
 ) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
+    total_parsed = 0
+    total_active = 0
+    total_filtered = 0
 
     for path in sorted(root.rglob("*.log")):
         try:
@@ -442,9 +495,18 @@ def build_llm_records(
         candidate_cursor = 0
 
         for decision_index, parsed in enumerate(parsed_records, start=1):
+            total_parsed += 1
             debug_fields = normalize_debug_fields(parsed.debug_value)
+
+            # 关键修复：只有 is_active_llm_record 返回 True 的记录才保留
+            if not is_active_llm_record(parsed):
+                total_filtered += 1
+                continue
+
+            total_active += 1
+
             record: dict[str, Any] = {
-                "id": llm_record_id(meta["match_key"], meta["seat"], decision_index),
+                "id": llm_record_id(meta["match_key"], meta["seat"], total_active),
                 "dataset_kind": dataset_kind,
                 "mode": meta["mode"],
                 "source_root": meta["source_root"],
@@ -455,7 +517,7 @@ def build_llm_records(
                 "opponent_name": meta["opponent_name"],
                 "round": meta["round"],
                 "seat": meta["seat"],
-                "decision_index": decision_index,
+                "decision_index": total_active,  # 使用实际的有效决策索引
                 "timestamp": parsed.timestamp,
                 "system_prompt": debug_fields.get("system_prompt"),
                 "user_prompt": debug_fields.get("user_prompt"),
@@ -486,11 +548,8 @@ def build_llm_records(
                 record["llm1_name"] = meta["llm1_name"]
                 record["llm2_name"] = meta["llm2_name"]
 
-            if (
-                game_ref is not None
-                and is_active_llm_record(parsed)
-                and candidate_cursor < len(candidate_events)
-            ):
+            # 关联到 game event
+            if game_ref is not None and candidate_cursor < len(candidate_events):
                 event_index = candidate_events[candidate_cursor]
                 candidate_cursor += 1
                 record["game_event_index"] = event_index
@@ -498,8 +557,12 @@ def build_llm_records(
                     event_index
                 )
 
-            records.append(record)
+            if not dry_run:
+                records.append(record)
 
+    print(
+        f"[stats] {root.name}: parsed={total_parsed}, active={total_active}, filtered={total_filtered}"
+    )
     return records
 
 
@@ -521,21 +584,47 @@ def write_summary(path: Path, summary: dict[str, Any]) -> None:
 def main() -> None:
     args = parse_args()
     output_dir: Path = args.output_dir.resolve()
+    dry_run = args.dry_run
 
+    print("=" * 60)
+    print("Botzone Log to JSONL Converter (Fixed Version)")
+    print("=" * 60)
+    print(f"Output dir: {output_dir}")
+    print(f"Dry run: {dry_run}")
+    print()
+
+    # Step 1: Build game index
+    print("[1/4] Building game index (single)...")
     single_game_records, single_game_index = build_game_index(
         SINGLE_GAME_ROOT, "game_single"
     )
+    print(f"  -> {len(single_game_records)} game events indexed")
+
+    print("[2/4] Building game index (tournament)...")
     tournament_game_records, tournament_game_index = build_game_index(
         TOURNAMENT_GAME_ROOT, "game_tournament"
     )
+    print(f"  -> {len(tournament_game_records)} tournament game events indexed")
 
+    # Step 2: Build LLM records (with strict filtering)
+    print("[3/4] Building LLM records (single)...")
     single_llm_records = build_llm_records(
-        SINGLE_LLM_ROOT, single_game_index, "llm_single"
+        SINGLE_LLM_ROOT, single_game_index, "llm_single", dry_run=dry_run
     )
-    tournament_llm_records = build_llm_records(
-        TOURNAMENT_LLM_ROOT, tournament_game_index, "llm_tournament"
-    )
+    print(f"  -> {len(single_llm_records)} valid LLM records")
 
+    print("[4/4] Building LLM records (tournament)...")
+    tournament_llm_records = build_llm_records(
+        TOURNAMENT_LLM_ROOT, tournament_game_index, "llm_tournament", dry_run=dry_run
+    )
+    print(f"  -> {len(tournament_llm_records)} valid tournament LLM records")
+
+    if dry_run:
+        print("\n[Dry run] No files written.")
+        return
+
+    # Step 3: Write output
+    print("\n[Output] Writing JSONL files...")
     write_jsonl(output_dir / "game_single_records.jsonl", single_game_records)
     write_jsonl(output_dir / "game_tournament_records.jsonl", tournament_game_records)
     write_jsonl(output_dir / "llm_single_records.jsonl", single_llm_records)
@@ -544,6 +633,8 @@ def main() -> None:
     summary = {
         "generated_at_root": str(ROOT).replace("\\", "/"),
         "output_dir": str(output_dir).replace("\\", "/"),
+        "conversion_type": "filtered",
+        "filter_rule": "is_active_llm_record with MIN_VALID_SYSTEM_PROMPT_LEN=50",
         "counts": {
             "game_single_records": len(single_game_records),
             "game_tournament_records": len(tournament_game_records),
@@ -553,7 +644,10 @@ def main() -> None:
     }
     write_summary(output_dir / "conversion_summary.json", summary)
 
+    print("\n" + "=" * 60)
+    print("Summary:")
     print(json.dumps(summary, ensure_ascii=False, indent=2))
+    print("=" * 60)
 
 
 if __name__ == "__main__":
