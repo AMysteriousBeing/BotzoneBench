@@ -93,7 +93,7 @@ LV1_CONFIG_LIST = {
         BotConfig.fromID("6808a80ba32ffa0bd4954e73"),  # 第一次提交测试 1034
     ],
     "Chess": BotConfig.fromID("682a9a90d870d24732ac84e4"),  # tester 4
-    "TexasHoldem2p": BotConfig.fromID("63e4f8666ce79f4b2db33ecd"),  # Test 16
+    "TexasHoldem2p": BotConfig.fromID("63e4f8666ce79f4b2db33ecd"),  # Test 42
     "FightTheLandlord": [
         BotConfig.fromID("5af56457433be66904cd5fc9"),  # papertiger 448
         BotConfig.fromID("609e27f6f827b82eae68c497"),  # FightGroundOwner01 447
@@ -129,8 +129,8 @@ LV2_CONFIG_LIST = {
         BotConfig.fromID("6598021426354d2b0f01c91e"),  # MCTS_CPP 458
     ],
     "TexasHoldem2p": [
-        BotConfig.fromID("63e384696ce79f4b2db20359"),  # test 9
-        BotConfig.fromID("63f97abb6ce79f4b2dca6f49"),  # 德州扑克的尽头 8
+        BotConfig.fromID("63e384696ce79f4b2db20359"),  # test 30
+        BotConfig.fromID("63f97abb6ce79f4b2dca6f49"),  # 德州扑克的尽头 24
     ],
     "FightTheLandlord": [
         BotConfig.fromID("5b14092f8472ec612b15720f"),  # 不为谁而作的bot 421
@@ -173,7 +173,7 @@ LV3_CONFIG_LIST = {
         BotConfig.fromID("6566a5f482ee46246bb5857e"),  # trav 427
         BotConfig.fromID("5b1389aa20c3be3c79f94528"),  # gezifeiWZQ 428
     ],
-    "TexasHoldem2p": BotConfig.fromID("63fc5cbe6ce79f4b2dcce80f"),  # 赌___神 1
+    "TexasHoldem2p": BotConfig.fromID("63fc5cbe6ce79f4b2dcce80f"),  # 赌___神 6
     "ChineseStandardMahjong": [
         BotConfig.fromID("5fec394cd9383f7579add80f"),  # jsbsbsbsbsb 242
         BotConfig.fromID("694dfd233cb83c184cfd76df", userfile=True),  # TMahjong 251
@@ -216,6 +216,7 @@ LV4_CONFIG_LIST = {
         BotConfig.fromID("684431e6c5819238f6729e70", userfile=True),  # test 13
         BotConfig.fromID("66883144b54d400b70a004fe", userfile=True),  # test 14
     ],
+    "TexasHoldem2p": BotConfig.fromID("69f1831183ee0a54c18d0a60"),  # bot26 4
 }
 
 LV5_CONFIG_LIST = {
@@ -236,6 +237,9 @@ LV5_CONFIG_LIST = {
         BotConfig.fromID("658d130726354d2b0ff78fff"),  # Soundz 156
         BotConfig.fromID("6185f8c5dc5aa23c13afa1f1"),  # alpharun214782 157
         BotConfig.fromID("61cc812c8d8bd011d77ac110"),  # aoo 159
+    ],
+    "TexasHoldem2p": [
+        BotConfig.fromID("69f15ac383ee0a54c18ce584"),  # bot22 1
     ],
 }
 
